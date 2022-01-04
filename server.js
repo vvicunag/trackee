@@ -1,14 +1,9 @@
 const express = require("express");
-const mysql = require("mysql2")
+const mysql = require("mysql2");
+const cTable = require('console.table');
 
 const app = express ();
 const PORT = process.env.PORT || 2525;
-const conn = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "cocodrilo69",
-    database: "trackee_db"
-});
 
 app.use(express.urlencoded({extended: true}));
 
@@ -28,5 +23,6 @@ app.post("/api/add-movie", (req, res) => {
         console.log(result);
     });
 });
+
 
 app.listen(PORT, () => console.log("Server listening"));

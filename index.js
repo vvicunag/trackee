@@ -1,42 +1,78 @@
 const inquirer = require("inquirer"); 
 const cTable = require('console.table');
+const queries = require("./helpers/sqlqueries");
 
-const initialQuestion = 
+// Question bank
+const initializeQuestion = 
 [
     {
         type: 'list',
-        message: 'Do you want to add an employee?',
-        choices: ['Yes', 'No'],
-        name: 'addEmployee',
+        message: 'What do you want to do?',
+        choices: ['See employees', 'See roles','See departments', 'Add employee', 'Quit'],
+        name: 'initialize',
     },  
 ]
 
-getEngineerData = (employeeData) => {
-    inquirer.prompt({
-        type: 'input',
-        message: 'What is the GitHub of this engineer?',
-        name: 'engineerGithub',
-    }).then((response) => {
+
+const addEmployeeQuestions =
+[
+  {
+      type: 'input',
+      message: "What is the employee's first name?",
+      name: 'first-name',
+  },
+  {
+    type: 'input',
+    message: "What is the employee's last name?",
+    name: 'last-name',
+  },  
+  {
+    type: 'input',
+    message: "What is the employee's last name?",
+    name: 'last-name',
+  },
+/*  {
+    type: 'list',
+    message: "What is the role for the employee?",
+    choices: [],  create an array on top with the choices
+    name: 'last-name',
+  },*/
+]
+
+initializeApp = () => {
+    inquirer.prompt(initializeQuestion).then((response) => {
         console.log(response);
-    })
+        if(response.initialize == "See employees") {
+            queries.getEmployees();
+            initializeApp();
+        };
+        if(response.initialize == "See roles") {
+          queries.getRoles();
+          initializeApp();
+        };
+        if(response.initialize == "See departments") {
+          queries.getDepartments();
+          initializeApp();
+        };
+        if(response.initialize == "Add employee") {
+          addEmployee();
+        };
+    });
 }
 
-getEngineerData();
+
+const addEmployee = () => {
+  inquirer.prompt(addEmployeeQuestions).then((response) => {
+    console.log(response);
+  });
+}
 
 
 
-/*console.table([
-  {
-    name: 'foo',
-    age: 10
-  }, {
-    name: 'bar',
-    age: 20
-  }
-]);
+//initializeApp();
 
-// prints
-name  age
-----  ---
-foo   10
-bar   20*/
+const showmeRoles = () => {
+  queries.getRolesChoices();
+};
+
+showmeRoles();
