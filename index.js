@@ -14,8 +14,9 @@ const initializeQuestion =
 ]
 
 
-const addEmployeeQuestions =
-[
+const createEmployeeQuestions = async () => {
+  const roles = await getAllRoles();
+  return [
   {
       type: 'input',
       message: "What is the employee's first name?",
@@ -31,48 +32,53 @@ const addEmployeeQuestions =
     message: "What is the employee's last name?",
     name: 'last-name',
   },
-/*  {
+  {
     type: 'list',
-    message: "What is the role for the employee?",
-    choices: [],  create an array on top with the choices
-    name: 'last-name',
-  },*/
+    message: "What is the role of the employee?",
+    choices: roles.map(({title}) => title),
+    name: 'roles',
+  },
 ]
+};
 
 initializeApp = () => {
-    inquirer.prompt(initializeQuestion).then((response) => {
+    inquirer.prompt(initializeQuestion).then( async (response) => {
         console.log(response);
         if(response.initialize == "See employees") {
-            queries.getEmployees();
+            const [employees] = await queries.getEmployees();
+            console.table(employees);
             initializeApp();
         };
         if(response.initialize == "See roles") {
-          queries.getRoles();
+          const roles = await getAllRoles();
+          console.table(roles);
           initializeApp();
         };
         if(response.initialize == "See departments") {
-          queries.getDepartments();
+          const [departments] = await queries.getDepartments();
+          console.table(departments);
           initializeApp();
         };
         if(response.initialize == "Add employee") {
           addEmployee();
         };
     });
+};
+ 
+
+const getAllRoles = async () => {
+  const [roles] = await queries.getRoles();
+  return roles;
 }
 
-
-const addEmployee = () => {
-  inquirer.prompt(addEmployeeQuestions).then((response) => {
+const addEmployee = async () => {
+  inquirer.prompt(await createEmployeeQuestions()).then((response) => {
     console.log(response);
   });
 }
 
 
 
-//initializeApp();
+initializeApp();
 
-const showmeRoles = () => {
-  queries.getRolesChoices();
-};
 
-showmeRoles();
