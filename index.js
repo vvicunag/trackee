@@ -162,7 +162,6 @@ const getAllDepartments = async () => {
 
 const addEmployee = async () => {
   inquirer.prompt(await createEmployeeQuestions()).then((response) => {
-    console.log(response);
     queries.addSelectedEmployee(response);
     runApp();
   });
